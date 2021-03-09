@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "radiometric corrction"
+title: "radiometric correction"
 tags: study
 ---
 
