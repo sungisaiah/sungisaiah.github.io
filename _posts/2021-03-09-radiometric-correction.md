@@ -1,7 +1,10 @@
 ---
 layout: default
 title: "일반적인 분광 카메라 데이터의 방사보정"
+categories: Alpha
 tags: study
+use_math: true
+comments: true
 ---
 
 
