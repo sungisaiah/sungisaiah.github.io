@@ -41,4 +41,8 @@ $\frac{1}{3}$
 
 
 
-
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    displayAlign: "center"
+});
+</script>
