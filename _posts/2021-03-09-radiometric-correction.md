@@ -59,7 +59,7 @@ comments: true
 
 실제데이터와 교정 파일을 사용한 예를 들어보자. 먼저 다크프레임이 필요하다 Figure 1은 노이즈가 있지만, 현실에서 일어나는 좋은 예이다.
 
-![Not so big](./_pics/rc_figure1.JPG)
+![Not so big](./pics/rc_figure1.JPG)
 
 
 <script type="text/x-mathjax-config">
