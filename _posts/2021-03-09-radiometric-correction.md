@@ -7,7 +7,6 @@ use_math: true
 comments: true
 ---
 
-
 # 1. 소개
  
 방사보정 프로세스는 보정 및 스케일링을 위해 매개변수를 올바르게 정의한 후에는 실제로 사용자에게 보이지 않는다. 그러나 사용자는 프로세스를 이해하기 위해 방정식과 단위를 알고 있어야 한다.
@@ -37,10 +36,7 @@ comments: true
 # 4. 방사보정 등식
 방사보정 프로세스에서 보정된 단일 픽셀에 대한 분광복사량은 식(1)에 따라 계산된다.
 
-<I>$Pc = \frac{Pr\cdot G}{Ti\cdot Bw}$</I>
-
-
-<I>$P<sub>c</sub> = \frac{P<sub>r</sub>\cdot G}{T<sub>i</sub>\cdot B<sub>w</sub>}$</I>
+<I>$P_c_ = \frac{P_r_ \cdot G}{T_i_ \cdot B_w_}$</I>
 
 
 
