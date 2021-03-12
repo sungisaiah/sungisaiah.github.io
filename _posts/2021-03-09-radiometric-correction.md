@@ -40,7 +40,7 @@ comments: true
 
 여기서, <br>
 <I>Pr</I>: 다크 보정된 픽셀 값(여러 행의 신호 합계일 수 있음)<br>
-<I>G</I>: 해당 픽셀에 대한 고정 이득치(여러 이득치의 평균일 수 있음)<br>
+<I>G</I>: 해당 픽셀에 대한 교정 이득치(여러 이득치의 평균일 수 있음)<br>
 <I>Ti</I>: 노출 시간(ms)
 <I>Bw</I>: 행 내 분광 채널의 대역폭
 
@@ -59,7 +59,55 @@ comments: true
 
 실제데이터와 교정 파일을 사용한 예를 들어보자. 먼저 다크프레임이 필요하다 Figure 1은 노이즈가 있지만, 현실에서 일어나는 좋은 예이다.
 
-![Not so big](../img/rc_figure1.JPG)
+![Not so big](../img/2021-03-09-radiometric-correction/rc_figure1.JPG)
+<Figure 1. 잡음이 있는 다크프레임 데이터 샘플>
+
+25개 채널의 구성을 사용해 데이터를 획득하였다. 각 행의 너비가 4이고, 노출시간은 23.6ms였다. 간단한 예제를 위해 33 D.N.의 다크 픽셀 값을 추정할 수 있다.<br>
+이 예제에서 분광채널(#3) 중 하나를 선택해 보자. 구성에서는 490.96~497.44nm로 정의되고, 디텍터에서 42행으로부터 45행까지의 행에 도달한다. 이 행의 교정 이득(calibration gain)에 대한 지식이 필요하다. Figure 2에는 각 4개 행에 대한 이득의 공간 그래프가 나와있다. 센서 응답의 기울기가 빠르게 변화하고 있기 때문에 한 행에서 다른 행으로의 이득에 변동이 있다. 선택한 분광 채널의 평균 이득은 Figure 3에 나와있다.<br>
+
+![Not so big](../img/2021-03-09-radiometric-correction/rc_figure2.JPG)
+<Figure 2. 42~45행에 대한 교정 이득>
+
+FOV 내에서 한 지점(예: 50번째 열)을 선택하지 말라. 해당 열(및 행)의 평균 이득은 ca. 1.76으로 Figure 3의 평균이득 곡선 내에 나와 있다.
+
+![Not so big](../img/2021-03-09-radiometric-correction/rc_figure3.JPG)
+<Figure 3. 행 #42~#45에 대한 교정 이득의 평균>
+
+마지막으로, 원시 데이터가 필요하다. Figure 4는 다크프레임과 동일한 구성으로 비행 중에 기록된 파일에서 #42~#45행에 대한 원시데이터이다. 이 신호는 4개 행의 합계이다. 수직커서라인은 무시하라.
+
+![Not so big](../img/2021-03-09-radiometric-correction/rc_figure4.JPG)
+<Figure 4. 행 #42~#45의 원시데이터 합계 샘플>
+
+이제 예제에서 사용할 열 #50을 선택했다는 것을 상기하라. 합산된 원시데이터 값은 Figure 4에서 약 150 D.N.으로 나타난다.<br>
+32.768의 <I>Rmax</I>가 사용된다는 것을 정의 할 때, 이 예제를 완료하기에 충분한 정보가 있다. 먼저 식(1)에 따라 이 픽셀의 분광 복사(량)를 계산한다.
+
+<I>$Pc = \frac{Pr\times G}{Ti\times Bw}$</I><br><br>
+<I>$Pc = \frac{(150-33)D.N. \times 1.76(μW·ms/㎠-sr-㎚)/D.N.}{23.6 ms\times 4}$</I><br><br>
+<I>$Pc = 2.18 μW/㎠-sr-㎚ <br>
+ 
+ 그런 다음 식(2)를 사용하여 스케일링을 얻는다.
+ 
+ <I>$Psc = 32768 \times \frac{Pc}{Rmax}$</I><br><br>
+ <I>$Psc = 32768 \times \frac{2.18 μW/㎠-sr-㎚}{32.768 μW/㎠-sr-㎚}$</I>
+ <I>$Psc = 2180$</I><br>
+ 
+ #50열의 Figure 5에서 값이 C. 2180인지 확인할 수 있다. 수직 커서라인은 무시하라. 이제 복사(량)를 얻으려면 분광 복사(량)를 그 라인의 분광 샘플링과 곱해야 한다. 0.6nm 값을 예로 들어보자. 따라서 복사(량) <I>L</I>은,
+
+<I>$L = 2.18 μW/㎠-sr-㎚ \times 0.6 ㎚$</I><br><br>
+<I>$L = 1.31 μW/㎠-sr<br>
+
+![Not so big](../img/2021-03-09-radiometric-correction/rc_figure5.JPG)
+<Figure 5. 행 #42~#45의 원시데이터 합계 샘플>
+
+# 6. 주의
+
+CCD 디텍터를 사용할 때는 그러한 검출기의 기존 기능을 기억해야 한다. 이들 중 하나는 <b>스미어 보정</b>으로 암전류를 빼기 전에 원시데이터에 수행해야 한다.
+
+# 7. 참조
+1. William L. Wolfe, <I>"Introduction to Radiometry"</I>, SPIE Optical Engineering Press, 1988.
+2. Norman S. Kopeika, <I>"A System Engineering Approach to Imaging"</I>, SPIE Optical Engineering Press, 1998.
+3. Philip N. Slater, <I>"Remote Sensing Optics and Optical Systems"</I>, Addison-Wesley Publishing Company, 1980.
+
 
 
 <script type="text/x-mathjax-config">
