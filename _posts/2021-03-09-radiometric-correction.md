@@ -36,7 +36,7 @@ comments: true
 # 4. 방사보정 등식
 방사보정 프로세스에서 보정된 단일 픽셀에 대한 분광복사량은 식(1)에 따라 계산된다.
 
-<I>$P_c_ = \frac{P_r_ \cdot G}{T_i_ \cdot B_w_}$</I>
+<I>$$P_c_ = \frac{P_r_ \cdot G}{T_i_ \cdot B_w_}$$</I>
 
 
 
