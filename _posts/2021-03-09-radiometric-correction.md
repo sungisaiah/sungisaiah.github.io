@@ -39,7 +39,9 @@ comments: true
 
 <I>$Pc = \frac{Pr\cdot G}{Ti\cdot Bw}$</I>
 
-##<I>$P^c^ = \frac{P^r^\cdot G}{T^i^\cdot B^w^}$</I>
+
+<I>$P^c^ = \frac{P^r^\cdot G}{T^i^\cdot B^w^}$</I>
+
 
 
 
