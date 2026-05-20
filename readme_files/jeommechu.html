@@ -1,256 +1,124 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>오늘 점메추</title>
-  <style>
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
-      background: transparent;
-      color: #2c2c2c;
-    }
-    body { padding: 16px; }
-    .lp {
-      max-width: 480px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    }
-    .lp-title {
-      text-align: center;
-      font-size: 22px;
-      font-weight: 700;
-      margin: 0 0 4px 0;
-    }
-    .lp-sub {
-      text-align: center;
-      font-size: 13px;
-      color: #999;
-      margin: 0 0 18px 0;
-    }
-    .lp-cats {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .lp-cat {
-      padding: 6px 12px;
-      font-size: 12px;
-      border: 1.5px solid #e8e8e8;
-      border-radius: 999px;
-      background: white;
-      cursor: pointer;
-      color: #666;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-    .lp-cat:hover { border-color: #ccc; }
-    .lp-cat.active {
-      background: #ff6b35;
-      border-color: #ff6b35;
-      color: white;
-    }
-    .lp-display {
-      background: #faf8f5;
-      border-radius: 14px;
-      padding: 32px 20px;
-      text-align: center;
-      margin-bottom: 16px;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .lp-emoji {
-      font-size: 56px;
-      line-height: 1;
-      margin-bottom: 10px;
-    }
-    .lp-name {
-      font-size: 26px;
-      font-weight: 700;
-      color: #222;
-    }
-    .lp-cat-label {
-      font-size: 12px;
-      color: #888;
-      margin-top: 4px;
-    }
-    .lp-pick {
-      width: 100%;
-      padding: 14px;
-      background: #ff6b35;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-    .lp-pick:hover { background: #e85a28; }
-    .lp-pick:active { transform: scale(0.98); }
-    .lp-pick:disabled { opacity: 0.6; cursor: wait; }
-    .lp-history {
-      margin-top: 14px;
-      font-size: 12px;
-      color: #aaa;
-      text-align: center;
-      min-height: 16px;
-    }
-    .lp-spin .lp-emoji, .lp-spin .lp-name {
-      animation: lp-shake 0.08s linear infinite;
-    }
-    @keyframes lp-shake {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘 점메추</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;background:transparent;color:#2c2c2c}
+body{padding:16px}
+.lp{max-width:480px;margin:0 auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.lp-title{text-align:center;font-size:22px;font-weight:700;margin:0 0 4px}
+.lp-sub{text-align:center;font-size:13px;color:#999;margin:0 0 18px}
+.lp-cats{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;justify-content:center}
+.lp-cat{padding:6px 11px;font-size:12px;border:1.5px solid #e8e8e8;border-radius:999px;background:#fff;cursor:pointer;color:#666;font-family:inherit;transition:all 0.15s}
+.lp-cat:hover{border-color:#ccc}
+.lp-cat.active{background:#ff6b35;border-color:#ff6b35;color:#fff}
+.lp-count{font-size:11px;color:#aaa;text-align:center;margin-bottom:14px}
+.lp-display{background:#faf8f5;border-radius:14px;padding:32px 20px;text-align:center;margin-bottom:16px;min-height:150px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.lp-emoji{font-size:56px;line-height:1;margin-bottom:10px}
+.lp-name{font-size:26px;font-weight:700;color:#222}
+.lp-cat-label{font-size:12px;color:#888;margin-top:4px}
+.lp-pick{width:100%;padding:14px;background:#ff6b35;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.lp-pick:hover{background:#e85a28}
+.lp-pick:active{transform:scale(0.98)}
+.lp-pick:disabled{opacity:0.6;cursor:wait}
+.lp-history{margin-top:14px;font-size:12px;color:#aaa;text-align:center;min-height:16px}
+.lp-spin .lp-emoji,.lp-spin .lp-name{animation:lp-shake 0.08s linear infinite}
+@keyframes lp-shake{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+</style>
 </head>
 <body>
-  <div class="lp">
-    <h1 class="lp-title">🍱 오늘 점메추</h1>
-    <p class="lp-sub">버튼 누르면 운명이 결정됩니다</p>
-    <div class="lp-cats" id="lp-cats"></div>
-    <div class="lp-display" id="lp-display">
-      <div class="lp-emoji" id="lp-emoji">🍴</div>
-      <div class="lp-name" id="lp-name">버튼을 눌러주세요</div>
-      <div class="lp-cat-label" id="lp-cat-label"></div>
-    </div>
-    <button class="lp-pick" id="lp-pick">🎲 뽑기</button>
-    <div class="lp-history" id="lp-history"></div>
-  </div>
+<div class="lp">
+<h1 class="lp-title">🍱 오늘의 점/저메추</h1>
+<p class="lp-sub">300+ 메뉴 중 운명의 한 그릇</p>
+<div class="lp-cats" id="lp-cats"></div>
+<div class="lp-count" id="lp-count"></div>
+<div class="lp-display" id="lp-display">
+<div class="lp-emoji" id="lp-emoji">🍴</div>
+<div class="lp-name" id="lp-name">버튼을 눌러주세요</div>
+<div class="lp-cat-label" id="lp-cat-label"></div>
+</div>
+<button class="lp-pick" id="lp-pick">🎲 뽑기</button>
+<div class="lp-history" id="lp-history"></div>
+</div>
+<script>
+const MENUS=[
+{n:'김치찌개',e:'🥘',c:'한식'},{n:'된장찌개',e:'🥘',c:'한식'},{n:'순두부찌개',e:'🍲',c:'한식'},{n:'청국장',e:'🥘',c:'한식'},{n:'부대찌개',e:'🍲',c:'한식'},{n:'김치찜',e:'🥘',c:'한식'},{n:'갈비탕',e:'🍲',c:'한식'},{n:'설렁탕',e:'🍲',c:'한식'},{n:'곰탕',e:'🍲',c:'한식'},{n:'도가니탕',e:'🍲',c:'한식'},{n:'꼬리곰탕',e:'🍲',c:'한식'},{n:'삼계탕',e:'🍲',c:'한식'},{n:'닭개장',e:'🍲',c:'한식'},{n:'육개장',e:'🍲',c:'한식'},{n:'추어탕',e:'🍲',c:'한식'},{n:'매운탕',e:'🌶️',c:'한식'},{n:'알탕',e:'🍲',c:'한식'},{n:'동태탕',e:'🐟',c:'한식'},{n:'대구탕',e:'🐟',c:'한식'},{n:'해물탕',e:'🦐',c:'한식'},{n:'꽃게탕',e:'🦀',c:'한식'},{n:'콩나물국밥',e:'🍚',c:'한식'},{n:'돼지국밥',e:'🍜',c:'한식'},{n:'순대국밥',e:'🍜',c:'한식'},{n:'소머리국밥',e:'🍜',c:'한식'},{n:'우거지국밥',e:'🍜',c:'한식'},{n:'황태해장국',e:'🍲',c:'한식'},{n:'뼈해장국',e:'🍲',c:'한식'},{n:'선지해장국',e:'🍲',c:'한식'},{n:'올갱이해장국',e:'🍲',c:'한식'},{n:'잔치국수',e:'🍜',c:'한식'},{n:'비빔국수',e:'🍜',c:'한식'},{n:'막국수',e:'🍜',c:'한식'},{n:'콩국수',e:'🍜',c:'한식'},{n:'들깨칼국수',e:'🍜',c:'한식'},{n:'바지락칼국수',e:'🍜',c:'한식'},{n:'닭칼국수',e:'🍜',c:'한식'},{n:'멸치칼국수',e:'🍜',c:'한식'},{n:'수제비',e:'🍲',c:'한식'},{n:'들깨수제비',e:'🍲',c:'한식'},{n:'평양냉면',e:'🍜',c:'한식'},{n:'함흥냉면',e:'🍜',c:'한식'},{n:'물냉면',e:'🍜',c:'한식'},{n:'비빔냉면',e:'🍜',c:'한식'},{n:'쫄면',e:'🍜',c:'한식'},{n:'비빔밥',e:'🍱',c:'한식'},{n:'돌솥비빔밥',e:'🍱',c:'한식'},{n:'산채비빔밥',e:'🍱',c:'한식'},{n:'회덮밥',e:'🍣',c:'한식'},{n:'알밥',e:'🍱',c:'한식'},{n:'낙지덮밥',e:'🐙',c:'한식'},{n:'오징어덮밥',e:'🦑',c:'한식'},{n:'제육덮밥',e:'🍚',c:'한식'},{n:'불고기덮밥',e:'🍚',c:'한식'},{n:'김치볶음밥',e:'🍚',c:'한식'},{n:'새우볶음밥',e:'🦐',c:'한식'},{n:'낙지볶음밥',e:'🐙',c:'한식'},{n:'영양밥',e:'🍚',c:'한식'},{n:'콩나물밥',e:'🍚',c:'한식'},{n:'굴밥',e:'🍚',c:'한식'},{n:'삼겹살',e:'🥩',c:'한식'},{n:'목살',e:'🥩',c:'한식'},{n:'항정살',e:'🥩',c:'한식'},{n:'갈매기살',e:'🥩',c:'한식'},{n:'오겹살',e:'🥩',c:'한식'},{n:'차돌박이',e:'🥩',c:'한식'},{n:'우삼겹',e:'🥩',c:'한식'},{n:'소갈비',e:'🍖',c:'한식'},{n:'LA갈비',e:'🍖',c:'한식'},{n:'양념갈비',e:'🍖',c:'한식'},{n:'돼지갈비',e:'🍖',c:'한식'},{n:'닭갈비',e:'🍗',c:'한식'},{n:'불고기',e:'🥩',c:'한식'},{n:'제육볶음',e:'🌶️',c:'한식'},{n:'두루치기',e:'🌶️',c:'한식'},{n:'주꾸미볶음',e:'🐙',c:'한식'},{n:'낙지볶음',e:'🐙',c:'한식'},{n:'오징어볶음',e:'🦑',c:'한식'},{n:'닭볶음탕',e:'🍗',c:'한식'},{n:'안동찜닭',e:'🍗',c:'한식'},{n:'닭한마리',e:'🍗',c:'한식'},{n:'곱창',e:'🥩',c:'한식'},{n:'막창',e:'🥩',c:'한식'},{n:'곱창전골',e:'🍲',c:'한식'},{n:'보쌈',e:'🥩',c:'한식'},{n:'족발',e:'🍖',c:'한식'},{n:'갈치구이',e:'🐟',c:'한식'},{n:'고등어구이',e:'🐟',c:'한식'},{n:'삼치구이',e:'🐟',c:'한식'},{n:'장어구이',e:'🐟',c:'한식'},{n:'장어덮밥',e:'🐟',c:'한식'},{n:'간장게장',e:'🦀',c:'한식'},{n:'양념게장',e:'🦀',c:'한식'},{n:'물회',e:'🐟',c:'한식'},{n:'김치전',e:'🥞',c:'한식'},{n:'해물파전',e:'🥞',c:'한식'},{n:'부추전',e:'🥞',c:'한식'},{n:'모듬전',e:'🥞',c:'한식'},{n:'전복죽',e:'🥣',c:'한식'},{n:'단호박죽',e:'🥣',c:'한식'},{n:'아구찜',e:'🌶️',c:'한식'},{n:'해물찜',e:'🌶️',c:'한식'},
+{n:'짜장면',e:'🍜',c:'중식'},{n:'간짜장',e:'🍜',c:'중식'},{n:'삼선짜장',e:'🍜',c:'중식'},{n:'사천짜장',e:'🌶️',c:'중식'},{n:'짬뽕',e:'🍜',c:'중식'},{n:'삼선짬뽕',e:'🍜',c:'중식'},{n:'사천짬뽕',e:'🌶️',c:'중식'},{n:'짬짜면',e:'🍜',c:'중식'},{n:'짜장밥',e:'🍚',c:'중식'},{n:'짬뽕밥',e:'🍚',c:'중식'},{n:'중화볶음밥',e:'🍚',c:'중식'},{n:'잡채밥',e:'🍚',c:'중식'},{n:'울면',e:'🍜',c:'중식'},{n:'기스면',e:'🍜',c:'중식'},{n:'탕수육',e:'🍤',c:'중식'},{n:'깐풍기',e:'🍗',c:'중식'},{n:'양장피',e:'🥗',c:'중식'},{n:'팔보채',e:'🍤',c:'중식'},{n:'류산슬',e:'🥩',c:'중식'},{n:'라조기',e:'🍗',c:'중식'},{n:'유린기',e:'🍗',c:'중식'},{n:'칠리새우',e:'🦐',c:'중식'},{n:'깐쇼새우',e:'🦐',c:'중식'},{n:'멘보샤',e:'🦐',c:'중식'},{n:'마파두부',e:'🌶️',c:'중식'},{n:'마라탕',e:'🌶️',c:'중식'},{n:'마라샹궈',e:'🌶️',c:'중식'},{n:'훠궈',e:'🍲',c:'중식'},{n:'양꼬치',e:'🍢',c:'중식'},{n:'꿔바로우',e:'🍖',c:'중식'},{n:'동파육',e:'🍖',c:'중식'},{n:'고추잡채',e:'🌶️',c:'중식'},
+{n:'모듬초밥',e:'🍣',c:'일식'},{n:'광어초밥',e:'🍣',c:'일식'},{n:'연어초밥',e:'🍣',c:'일식'},{n:'참치초밥',e:'🍣',c:'일식'},{n:'새우초밥',e:'🦐',c:'일식'},{n:'우니초밥',e:'🍣',c:'일식'},{n:'카이센동',e:'🍣',c:'일식'},{n:'연어덮밥',e:'🍣',c:'일식'},{n:'마구로동',e:'🍣',c:'일식'},{n:'사케동',e:'🍣',c:'일식'},{n:'가츠동',e:'🍱',c:'일식'},{n:'규동',e:'🍚',c:'일식'},{n:'텐동',e:'🍤',c:'일식'},{n:'오야꼬동',e:'🍳',c:'일식'},{n:'부타동',e:'🍚',c:'일식'},{n:'우나기동',e:'🐟',c:'일식'},{n:'카케우동',e:'🍜',c:'일식'},{n:'키츠네우동',e:'🍜',c:'일식'},{n:'붓카케우동',e:'🍜',c:'일식'},{n:'카레우동',e:'🍛',c:'일식'},{n:'텐푸라우동',e:'🍤',c:'일식'},{n:'자루소바',e:'🍜',c:'일식'},{n:'모리소바',e:'🍜',c:'일식'},{n:'텐소바',e:'🍜',c:'일식'},{n:'돈코츠라멘',e:'🍜',c:'일식'},{n:'미소라멘',e:'🍜',c:'일식'},{n:'쇼유라멘',e:'🍜',c:'일식'},{n:'시오라멘',e:'🍜',c:'일식'},{n:'츠케멘',e:'🍜',c:'일식'},{n:'마제소바',e:'🍜',c:'일식'},{n:'야끼소바',e:'🍜',c:'일식'},{n:'야끼우동',e:'🍜',c:'일식'},{n:'등심돈가스',e:'🍱',c:'일식'},{n:'안심돈가스',e:'🍱',c:'일식'},{n:'치즈돈가스',e:'🧀',c:'일식'},{n:'카츠레츠',e:'🍱',c:'일식'},{n:'함박스테이크',e:'🥩',c:'일식'},{n:'오코노미야끼',e:'🥞',c:'일식'},{n:'타코야끼',e:'🐙',c:'일식'},{n:'야끼토리',e:'🍢',c:'일식'},{n:'스키야키',e:'🍲',c:'일식'},
+{n:'까르보나라',e:'🍝',c:'양식'},{n:'알리오올리오',e:'🍝',c:'양식'},{n:'토마토파스타',e:'🍝',c:'양식'},{n:'봉골레',e:'🍝',c:'양식'},{n:'미트소스파스타',e:'🍝',c:'양식'},{n:'크림파스타',e:'🍝',c:'양식'},{n:'로제파스타',e:'🍝',c:'양식'},{n:'페스토파스타',e:'🍝',c:'양식'},{n:'아라비아따',e:'🍝',c:'양식'},{n:'라자냐',e:'🧀',c:'양식'},{n:'마르게리타피자',e:'🍕',c:'양식'},{n:'페퍼로니피자',e:'🍕',c:'양식'},{n:'하와이안피자',e:'🍕',c:'양식'},{n:'고르곤졸라피자',e:'🍕',c:'양식'},{n:'콰트로치즈피자',e:'🍕',c:'양식'},{n:'시카고피자',e:'🍕',c:'양식'},{n:'채끝스테이크',e:'🥩',c:'양식'},{n:'안심스테이크',e:'🥩',c:'양식'},{n:'티본스테이크',e:'🥩',c:'양식'},{n:'립아이스테이크',e:'🥩',c:'양식'},{n:'토마호크',e:'🥩',c:'양식'},{n:'리조또',e:'🍚',c:'양식'},{n:'뇨끼',e:'🍝',c:'양식'},{n:'라따뚜이',e:'🥗',c:'양식'},{n:'파니니',e:'🥪',c:'양식'},{n:'BLT샌드위치',e:'🥪',c:'양식'},{n:'클럽샌드위치',e:'🥪',c:'양식'},{n:'크로크무슈',e:'🧀',c:'양식'},{n:'에그베네딕트',e:'🍳',c:'양식'},{n:'오믈렛',e:'🍳',c:'양식'},{n:'프렌치토스트',e:'🍞',c:'양식'},{n:'팬케이크',e:'🥞',c:'양식'},{n:'와플',e:'🧇',c:'양식'},{n:'양송이수프',e:'🥣',c:'양식'},{n:'클램차우더',e:'🥣',c:'양식'},{n:'미네스트로네',e:'🥣',c:'양식'},{n:'슈니첼',e:'🍖',c:'양식'},
+{n:'김밥',e:'🍙',c:'분식'},{n:'참치김밥',e:'🍙',c:'분식'},{n:'치즈김밥',e:'🍙',c:'분식'},{n:'땡초김밥',e:'🌶️',c:'분식'},{n:'누드김밥',e:'🍙',c:'분식'},{n:'충무김밥',e:'🍙',c:'분식'},{n:'라면',e:'🍜',c:'분식'},{n:'치즈라면',e:'🧀',c:'분식'},{n:'떡라면',e:'🍜',c:'분식'},{n:'만두라면',e:'🥟',c:'분식'},{n:'짜파게티',e:'🍜',c:'분식'},{n:'떡볶이',e:'🌶️',c:'분식'},{n:'치즈떡볶이',e:'🧀',c:'분식'},{n:'로제떡볶이',e:'🌶️',c:'분식'},{n:'짜장떡볶이',e:'🍜',c:'분식'},{n:'카레떡볶이',e:'🍛',c:'분식'},{n:'국물떡볶이',e:'🌶️',c:'분식'},{n:'즉석떡볶이',e:'🌶️',c:'분식'},{n:'라볶이',e:'🍜',c:'분식'},{n:'쫄볶이',e:'🍜',c:'분식'},{n:'순대',e:'🥓',c:'분식'},{n:'백순대',e:'🥓',c:'분식'},{n:'순대볶음',e:'🥓',c:'분식'},{n:'튀김',e:'🍤',c:'분식'},{n:'김말이',e:'🍙',c:'분식'},{n:'오뎅',e:'🍢',c:'분식'},{n:'군만두',e:'🥟',c:'분식'},{n:'찐만두',e:'🥟',c:'분식'},{n:'김치만두',e:'🥟',c:'분식'},{n:'갈비만두',e:'🥟',c:'분식'},{n:'새우만두',e:'🦐',c:'분식'},{n:'호떡',e:'🥞',c:'분식'},{n:'핫도그',e:'🌭',c:'분식'},
+{n:'쌀국수',e:'🍜',c:'아시안'},{n:'분짜',e:'🥗',c:'아시안'},{n:'반미',e:'🥖',c:'아시안'},{n:'월남쌈',e:'🥗',c:'아시안'},{n:'팟타이',e:'🍜',c:'아시안'},{n:'쏨땀',e:'🥗',c:'아시안'},{n:'똠양꿍',e:'🍲',c:'아시안'},{n:'그린커리',e:'🍛',c:'아시안'},{n:'마사만커리',e:'🍛',c:'아시안'},{n:'카오팟',e:'🍚',c:'아시안'},{n:'카오소이',e:'🍜',c:'아시안'},{n:'인도카레',e:'🍛',c:'아시안'},{n:'버터치킨',e:'🍗',c:'아시안'},{n:'치킨티카마살라',e:'🍗',c:'아시안'},{n:'비리야니',e:'🍚',c:'아시안'},{n:'난',e:'🍞',c:'아시안'},{n:'탄두리치킨',e:'🍗',c:'아시안'},{n:'케밥',e:'🥙',c:'아시안'},{n:'슈와르마',e:'🥙',c:'아시안'},{n:'후무스',e:'🥗',c:'아시안'},
+{n:'치즈버거',e:'🍔',c:'패스트푸드'},{n:'베이컨버거',e:'🍔',c:'패스트푸드'},{n:'더블치즈버거',e:'🍔',c:'패스트푸드'},{n:'빅맥',e:'🍔',c:'패스트푸드'},{n:'와퍼',e:'🍔',c:'패스트푸드'},{n:'불고기버거',e:'🍔',c:'패스트푸드'},{n:'새우버거',e:'🦐',c:'패스트푸드'},{n:'치킨버거',e:'🍗',c:'패스트푸드'},{n:'맥너겟',e:'🍗',c:'패스트푸드'},{n:'후라이드치킨',e:'🍗',c:'패스트푸드'},{n:'양념치킨',e:'🍗',c:'패스트푸드'},{n:'간장치킨',e:'🍗',c:'패스트푸드'},{n:'마늘치킨',e:'🍗',c:'패스트푸드'},{n:'파닭',e:'🍗',c:'패스트푸드'},{n:'허니콤보',e:'🍗',c:'패스트푸드'},{n:'황금올리브',e:'🍗',c:'패스트푸드'},{n:'반반치킨',e:'🍗',c:'패스트푸드'},{n:'뿌링클',e:'🍗',c:'패스트푸드'},{n:'닭강정',e:'🍗',c:'패스트푸드'},{n:'핫윙',e:'🍗',c:'패스트푸드'},
+{n:'타코',e:'🌮',c:'멕시칸'},{n:'부리토',e:'🌯',c:'멕시칸'},{n:'케사디야',e:'🧀',c:'멕시칸'},{n:'나초',e:'🧀',c:'멕시칸'},{n:'파히타',e:'🌶️',c:'멕시칸'},{n:'엔칠라다',e:'🌯',c:'멕시칸'},{n:'치미창가',e:'🌯',c:'멕시칸'},
+{n:'시저샐러드',e:'🥗',c:'샐러드'},{n:'콥샐러드',e:'🥗',c:'샐러드'},{n:'그릭샐러드',e:'🥗',c:'샐러드'},{n:'카프레제샐러드',e:'🍅',c:'샐러드'},{n:'치킨샐러드',e:'🥗',c:'샐러드'},{n:'연어샐러드',e:'🥗',c:'샐러드'},{n:'참치샐러드',e:'🥗',c:'샐러드'},{n:'닭가슴살샐러드',e:'🥗',c:'샐러드'},{n:'아보카도샐러드',e:'🥑',c:'샐러드'},{n:'포케볼',e:'🥗',c:'샐러드'},{n:'그레인볼',e:'🥗',c:'샐러드'},{n:'아사이볼',e:'🍇',c:'샐러드'},{n:'그래놀라요거트',e:'🥣',c:'샐러드'},{n:'베이글샌드위치',e:'🥯',c:'샐러드'},{n:'크루아상샌드위치',e:'🥐',c:'샐러드'}
+];
 
-  <script>
-    const MENUS = [
-      {n:'김치찌개', e:'🥘', c:'한식'},
-      {n:'된장찌개', e:'🥘', c:'한식'},
-      {n:'비빔밥', e:'🍱', c:'한식'},
-      {n:'제육덮밥', e:'🍚', c:'한식'},
-      {n:'부대찌개', e:'🍲', c:'한식'},
-      {n:'삼겹살', e:'🥩', c:'한식'},
-      {n:'갈비탕', e:'🍲', c:'한식'},
-      {n:'순두부찌개', e:'🍲', c:'한식'},
-      {n:'콩나물국밥', e:'🍚', c:'한식'},
-      {n:'돼지국밥', e:'🍜', c:'한식'},
-      {n:'짜장면', e:'🍜', c:'중식'},
-      {n:'짬뽕', e:'🍜', c:'중식'},
-      {n:'탕수육', e:'🍤', c:'중식'},
-      {n:'마라탕', e:'🌶️', c:'중식'},
-      {n:'마라샹궈', e:'🌶️', c:'중식'},
-      {n:'볶음밥', e:'🍚', c:'중식'},
-      {n:'초밥', e:'🍣', c:'일식'},
-      {n:'우동', e:'🍜', c:'일식'},
-      {n:'돈가스', e:'🍱', c:'일식'},
-      {n:'라멘', e:'🍜', c:'일식'},
-      {n:'규동', e:'🍚', c:'일식'},
-      {n:'카츠동', e:'🍱', c:'일식'},
-      {n:'햄버거', e:'🍔', c:'양식'},
-      {n:'파스타', e:'🍝', c:'양식'},
-      {n:'피자', e:'🍕', c:'양식'},
-      {n:'스테이크', e:'🥩', c:'양식'},
-      {n:'리조또', e:'🍚', c:'양식'},
-      {n:'김밥', e:'🍙', c:'분식'},
-      {n:'떡볶이', e:'🌶️', c:'분식'},
-      {n:'라면', e:'🍜', c:'분식'},
-      {n:'쌀국수', e:'🍜', c:'기타'},
-      {n:'카레', e:'🍛', c:'기타'},
-      {n:'샐러드', e:'🥗', c:'기타'},
-      {n:'치킨', e:'🍗', c:'기타'}
-    ];
+const CATS=['전체','한식','중식','일식','양식','분식','아시안','패스트푸드','멕시칸','샐러드'];
+let cur='전체',history=[];
+try{history=JSON.parse(localStorage.getItem('lp-history')||'[]')}catch(e){}
+let last=null,spinning=false;
+const $cats=document.getElementById('lp-cats');
+const $count=document.getElementById('lp-count');
+const $emoji=document.getElementById('lp-emoji');
+const $name=document.getElementById('lp-name');
+const $label=document.getElementById('lp-cat-label');
+const $display=document.getElementById('lp-display');
+const $pick=document.getElementById('lp-pick');
+const $history=document.getElementById('lp-history');
 
-    const CATS = ['전체','한식','중식','일식','양식','분식','기타'];
-    let cur = '전체';
-    let history = [];
-    try { history = JSON.parse(localStorage.getItem('lp-history') || '[]'); } catch(e) {}
-    let last = null;
-    let spinning = false;
+function updateCount(){
+  const n=cur==='전체'?MENUS.length:MENUS.filter(m=>m.c===cur).length;
+  $count.textContent=cur+' · '+n+'개';
+}
 
-    const $cats = document.getElementById('lp-cats');
-    const $emoji = document.getElementById('lp-emoji');
-    const $name = document.getElementById('lp-name');
-    const $label = document.getElementById('lp-cat-label');
-    const $display = document.getElementById('lp-display');
-    const $pick = document.getElementById('lp-pick');
-    const $history = document.getElementById('lp-history');
+CATS.forEach(c=>{
+  const b=document.createElement('button');
+  b.className='lp-cat'+(c===cur?' active':'');
+  b.textContent=c;
+  b.onclick=()=>{
+    cur=c;
+    [...$cats.children].forEach(x=>x.classList.toggle('active',x.textContent===c));
+    updateCount();
+  };
+  $cats.appendChild(b);
+});
+updateCount();
 
-    CATS.forEach(c => {
-      const b = document.createElement('button');
-      b.className = 'lp-cat' + (c === cur ? ' active' : '');
-      b.textContent = c;
-      b.onclick = () => {
-        cur = c;
-        [...$cats.children].forEach(x => x.classList.toggle('active', x.textContent === c));
-      };
-      $cats.appendChild(b);
-    });
+if(history.length>0){
+  $history.textContent='최근: '+history.slice(0,4).join(' · ');
+}
 
-    if (history.length > 0) {
-      $history.textContent = '최근: ' + history.slice(0, 4).join(' · ');
+function pool(){return cur==='전체'?MENUS:MENUS.filter(m=>m.c===cur)}
+
+function pick(){
+  if(spinning)return;
+  spinning=true;$pick.disabled=true;$display.classList.add('lp-spin');
+  const p=pool();
+  if(p.length===0){$name.textContent='메뉴 없음';$label.textContent='';spinning=false;$pick.disabled=false;$display.classList.remove('lp-spin');return}
+  let avail=p;
+  if(last&&p.length>1)avail=p.filter(m=>m.n!==last.n);
+  const final=avail[Math.floor(Math.random()*avail.length)];
+  let count=0;const total=18;
+  const iv=setInterval(()=>{
+    const f=p[Math.floor(Math.random()*p.length)];
+    $emoji.textContent=f.e;$name.textContent=f.n;$label.textContent='';
+    count++;
+    if(count>=total){
+      clearInterval(iv);
+      $emoji.textContent=final.e;$name.textContent=final.n;$label.textContent=final.c;
+      $display.classList.remove('lp-spin');
+      last=final;history.unshift(final.n);
+      if(history.length>8)history.pop();
+      try{localStorage.setItem('lp-history',JSON.stringify(history))}catch(e){}
+      $history.textContent=history.length>1?'최근: '+history.slice(1,5).join(' · '):'';
+      spinning=false;$pick.disabled=false;
     }
-
-    function pool() {
-      return cur === '전체' ? MENUS : MENUS.filter(m => m.c === cur);
-    }
-
-    function pick() {
-      if (spinning) return;
-      spinning = true;
-      $pick.disabled = true;
-      $display.classList.add('lp-spin');
-
-      const p = pool();
-      if (p.length === 0) {
-        $name.textContent = '메뉴 없음';
-        $label.textContent = '';
-        spinning = false;
-        $pick.disabled = false;
-        $display.classList.remove('lp-spin');
-        return;
-      }
-
-      let avail = p;
-      if (last && p.length > 1) avail = p.filter(m => m.n !== last.n);
-      const final = avail[Math.floor(Math.random() * avail.length)];
-
-      let count = 0;
-      const total = 18;
-      const iv = setInterval(() => {
-        const f = p[Math.floor(Math.random() * p.length)];
-        $emoji.textContent = f.e;
-        $name.textContent = f.n;
-        $label.textContent = '';
-        count++;
-        if (count >= total) {
-          clearInterval(iv);
-          $emoji.textContent = final.e;
-          $name.textContent = final.n;
-          $label.textContent = final.c;
-          $display.classList.remove('lp-spin');
-          last = final;
-          history.unshift(final.n);
-          if (history.length > 8) history.pop();
-          try { localStorage.setItem('lp-history', JSON.stringify(history)); } catch(e) {}
-          $history.textContent = history.length > 1
-            ? '최근: ' + history.slice(1, 5).join(' · ')
-            : '';
-          spinning = false;
-          $pick.disabled = false;
-        }
-      }, 70);
-    }
-
-    document.getElementById('lp-pick').onclick = pick;
-  </script>
+  },70);
+}
+document.getElementById('lp-pick').onclick=pick;
+</script>
 </body>
 </html>
