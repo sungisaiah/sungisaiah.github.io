@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘 점메추</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background: transparent;
+      color: #2c2c2c;
+    }
+    body { padding: 16px; }
+    .lp {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .lp-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+    }
+    .lp-sub {
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+      margin: 0 0 18px 0;
+    }
+    .lp-cats {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .lp-cat {
+      padding: 6px 12px;
+      font-size: 12px;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 999px;
+      background: white;
+      cursor: pointer;
+      color: #666;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lp-cat:hover { border-color: #ccc; }
+    .lp-cat.active {
+      background: #ff6b35;
+      border-color: #ff6b35;
+      color: white;
+    }
+    .lp-display {
+      background: #faf8f5;
+      border-radius: 14px;
+      padding: 32px 20px;
+      text-align: center;
+      margin-bottom: 16px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .lp-emoji {
+      font-size: 56px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .lp-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: #222;
+    }
+    .lp-cat-label {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+    .lp-pick {
+      width: 100%;
+      padding: 14px;
+      background: #ff6b35;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lp-pick:hover { background: #e85a28; }
+    .lp-pick:active { transform: scale(0.98); }
+    .lp-pick:disabled { opacity: 0.6; cursor: wait; }
+    .lp-history {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      min-height: 16px;
+    }
+    .lp-spin .lp-emoji, .lp-spin .lp-name {
+      animation: lp-shake 0.08s linear infinite;
+    }
+    @keyframes lp-shake {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="lp">
+    <h1 class="lp-title">🍱 오늘 점메추</h1>
+    <p class="lp-sub">버튼 누르면 운명이 결정됩니다</p>
+    <div class="lp-cats" id="lp-cats"></div>
+    <div class="lp-display" id="lp-display">
+      <div class="lp-emoji" id="lp-emoji">🍴</div>
+      <div class="lp-name" id="lp-name">버튼을 눌러주세요</div>
+      <div class="lp-cat-label" id="lp-cat-label"></div>
+    </div>
+    <button class="lp-pick" id="lp-pick">🎲 뽑기</button>
+    <div class="lp-history" id="lp-history"></div>
+  </div>
+
+  <script>
+    const MENUS = [
+      {n:'김치찌개', e:'🥘', c:'한식'},
+      {n:'된장찌개', e:'🥘', c:'한식'},
+      {n:'비빔밥', e:'🍱', c:'한식'},
+      {n:'제육덮밥', e:'🍚', c:'한식'},
+      {n:'부대찌개', e:'🍲', c:'한식'},
+      {n:'삼겹살', e:'🥩', c:'한식'},
+      {n:'갈비탕', e:'🍲', c:'한식'},
+      {n:'순두부찌개', e:'🍲', c:'한식'},
+      {n:'콩나물국밥', e:'🍚', c:'한식'},
+      {n:'돼지국밥', e:'🍜', c:'한식'},
+      {n:'짜장면', e:'🍜', c:'중식'},
+      {n:'짬뽕', e:'🍜', c:'중식'},
+      {n:'탕수육', e:'🍤', c:'중식'},
+      {n:'마라탕', e:'🌶️', c:'중식'},
+      {n:'마라샹궈', e:'🌶️', c:'중식'},
+      {n:'볶음밥', e:'🍚', c:'중식'},
+      {n:'초밥', e:'🍣', c:'일식'},
+      {n:'우동', e:'🍜', c:'일식'},
+      {n:'돈가스', e:'🍱', c:'일식'},
+      {n:'라멘', e:'🍜', c:'일식'},
+      {n:'규동', e:'🍚', c:'일식'},
+      {n:'카츠동', e:'🍱', c:'일식'},
+      {n:'햄버거', e:'🍔', c:'양식'},
+      {n:'파스타', e:'🍝', c:'양식'},
+      {n:'피자', e:'🍕', c:'양식'},
+      {n:'스테이크', e:'🥩', c:'양식'},
+      {n:'리조또', e:'🍚', c:'양식'},
+      {n:'김밥', e:'🍙', c:'분식'},
+      {n:'떡볶이', e:'🌶️', c:'분식'},
+      {n:'라면', e:'🍜', c:'분식'},
+      {n:'쌀국수', e:'🍜', c:'기타'},
+      {n:'카레', e:'🍛', c:'기타'},
+      {n:'샐러드', e:'🥗', c:'기타'},
+      {n:'치킨', e:'🍗', c:'기타'}
+    ];
+
+    const CATS = ['전체','한식','중식','일식','양식','분식','기타'];
+    let cur = '전체';
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem('lp-history') || '[]'); } catch(e) {}
+    let last = null;
+    let spinning = false;
+
+    const $cats = document.getElementById('lp-cats');
+    const $emoji = document.getElementById('lp-emoji');
+    const $name = document.getElementById('lp-name');
+    const $label = document.getElementById('lp-cat-label');
+    const $display = document.getElementById('lp-display');
+    const $pick = document.getElementById('lp-pick');
+    const $history = document.getElementById('lp-history');
+
+    CATS.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'lp-cat' + (c === cur ? ' active' : '');
+      b.textContent = c;
+      b.onclick = () => {
+        cur = c;
+        [...$cats.children].forEach(x => x.classList.toggle('active', x.textContent === c));
+      };
+      $cats.appendChild(b);
+    });
+
+    if (history.length > 0) {
+      $history.textContent = '최근: ' + history.slice(0, 4).join(' · ');
+    }
+
+    function pool() {
+      return cur === '전체' ? MENUS : MENUS.filter(m => m.c === cur);
+    }
+
+    function pick() {
+      if (spinning) return;
+      spinning = true;
+      $pick.disabled = true;
+      $display.classList.add('lp-spin');
+
+      const p = pool();
+      if (p.length === 0) {
+        $name.textContent = '메뉴 없음';
+        $label.textContent = '';
+        spinning = false;
+        $pick.disabled = false;
+        $display.classList.remove('lp-spin');
+        return;
+      }
+
+      let avail = p;
+      if (last && p.length > 1) avail = p.filter(m => m.n !== last.n);
+      const final = avail[Math.floor(Math.random() * avail.length)];
+
+      let count = 0;
+      const total = 18;
+      const iv = setInterval(() => {
+        const f = p[Math.floor(Math.random() * p.length)];
+        $emoji.textContent = f.e;
+        $name.textContent = f.n;
+        $label.textContent = '';
+        count++;
+        if (count >= total) {
+          clearInterval(iv);
+          $emoji.textContent = final.e;
+          $name.textContent = final.n;
+          $label.textContent = final.c;
+          $display.classList.remove('lp-spin');
+          last = final;
+          history.unshift(final.n);
+          if (history.length > 8) history.pop();
+          try { localStorage.setItem('lp-history', JSON.stringify(history)); } catch(e) {}
+          $history.textContent = history.length > 1
+            ? '최근: ' + history.slice(1, 5).join(' · ')
+            : '';
+          spinning = false;
+          $pick.disabled = false;
+        }
+      }, 70);
+    }
+
+    document.getElementById('lp-pick').onclick = pick;
+  </script>
+</body>
+</html>
